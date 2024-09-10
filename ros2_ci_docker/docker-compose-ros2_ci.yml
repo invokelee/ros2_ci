@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  tortoisebot-ros2-gazebo:
+    image: invokelee/ros2-wp-test:1.0
+    # build:
+    #   context: ..
+    #   dockerfile: ./Dockerfile
+    hostname: ros2_gazebo
+    environment:    
+      - DISPLAY=${DISPLAY}
+      - ROS_MASTER_URI=http://ros2_gazebo:11311
+      - ROS_HOSTNAME=ros2_gazebo
+    command:
+      - /ros2_ci/entrypoint.sh
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./entrypoint.sh:/ros2_ci/entrypoint.sh
+      - gazebo-static:/ros2_ci/static/
+    networks:
+      - ros2_sim_net
+
+volumes:
+  # mount at '/var/lib/docker/volumes/tortoisebot_ros2_docker_gazebo-static/_data' in the host
+  gazebo-static:
+
+networks:
+  ros2_sim_net:
