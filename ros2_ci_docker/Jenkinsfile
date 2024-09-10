@@ -4,7 +4,7 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 sh '''
-                cat ~/catkin_ws/.my_password.txt | 
+                cat ~/ros2_ws/.my_password.txt | 
                 sudo docker login --username invokelee --password-stdin
                 '''
             }
@@ -12,16 +12,16 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 sh '''
-                cd ~/catkin_ws/src/ros1_ci_docker
-                sudo docker build -f Dockerfile -t invokelee/ros1-wp-test:1.0 /home/user
+                cd ~/ros2_ws/src/ros2_ci_docker
+                sudo docker build -f Dockerfile -t invokelee/ros2-wp-test:1.0 /home/user/ros2_ws/src/
                 '''
             }
         }
         stage('Docker compose up and Waypoint test') {
             steps {
                 sh '''
-                cd ~/catkin_ws/src/ros1_ci_docker
-                sudo docker compose -f docker-compose-ros1_ci.yml up
+                cd ~/ros2_ws/src/ros2_ci_docker
+                sudo docker compose -f docker-compose-ros2_ci.yml up
                 '''
             }
         }
@@ -29,15 +29,15 @@ pipeline {
             steps {
                 sh '''
                 sleep 5
-                cd ~/catkin_ws/src/ros1_ci_docker
-                sudo docker compose -f docker-compose-ros1_ci.yml down
+                cd ~/ros2_ws/src/ros2_ci_docker
+                sudo docker compose -f docker-compose-ros2_ci.yml down
                 '''
             }
         }
         stage('Done') {
             steps {
                 sh '''
-                echo "Docker build and run Pipeline job completed !"
+                echo "ROS2 - Docker build and run Pipeline job completed !"
                 '''
             }
         }
